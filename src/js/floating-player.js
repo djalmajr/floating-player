@@ -510,9 +510,9 @@ function identifyPopupUrl() {
     }
 }
 
-function setVideoTime(callback) {
+function getVideoInfo(callback) {
     var opt = {
-        file: 'js/inject.js'
+        file: 'js/inject-video-info.js'
     };
 
     chrome.tabs.executeScript(tabId, opt, function(result) {
@@ -532,7 +532,7 @@ function setVideoTime(callback) {
 
 function nativePictureInPicture(callback) {
     var opt = {
-        file: 'js/native-pip.js'
+        file: 'js/inject-native-pip.js'
     };
 
     chrome.tabs.executeScript(tabId, opt, function(result) {
@@ -560,10 +560,10 @@ function onExtensionClick() {
     }
 
     if (!fromContextMenu() && options.pause) {
-        if (options.nativePip) {
+        if (options.nativePip && document.pictureInPictureEnabled) {
             nativePictureInPicture(function(success) {
                 if (!success) {
-                    setVideoTime(function() {
+                    getVideoInfo(function() {
                         identifyPopupUrl();
                         preparePopup();
                     });
@@ -571,7 +571,7 @@ function onExtensionClick() {
             });
         }
         else {
-            setVideoTime(function() {
+            getVideoInfo(function() {
                 identifyPopupUrl();
                 preparePopup();
             });
